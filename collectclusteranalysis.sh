@@ -14,6 +14,7 @@ tracetime=10
 testcluster=testcluster
 
 
+gcloud container clusters get-credentials $testcluster --zone $testzone --project $testproject 
 # Get baseline logs (CPU and Memory load)
 kubectl top nodes > baseline.txt
 end=$((SECONDS+$baselinelogtime))
@@ -44,7 +45,6 @@ kubectl apply -f $pingcontainer
 
 gcloud container clusters get-credentials $testcluster --zone $testzone --project $testproject
 # While job trace ongoing get logs of CPU and memory load
-kubectl top nodes > tracetop.txt
 end=$((SECONDS+$tracetime))
 while [$SECONDS -lt $end]; do
     kubectl top nodes >> tracetop.txt
@@ -58,6 +58,7 @@ kubectl logs -l name=$pinglabel > pinglogs.txt
 kubectl delete -f $pingcontainer
 gcloud container clusters get-credentials $testcluster --zone $testzone --project $testproject
 kubectl delete -f $testcontainer
+kubectl delete svc $testservicename
 
 # Analyse logs to choose next test cluster, or stop if stopping condition met
 # python3 logAnalysis.py
