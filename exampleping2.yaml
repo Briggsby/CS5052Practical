@@ -20,4 +20,4 @@ spec:
         - configMapRef:
           name: special-config
         command: ["/bin/sh", "-c"]
-        args: ["bash root/pingscript.sh $(PINGTIME) $(IPTARGET) $(PORTTARGET)"]
+        args: ["bash root/pingscript.sh $(PINGTIME) $(IPTARGET) $(PORTTARGET) && while true; do sleep 1; done"]
