@@ -1,7 +1,8 @@
 # Set variables
 baselinelogtime=10
 testcontainer=exampleserver.yaml
-pingcontainer=pingcontainer.yaml
+pingcontainer=exampleping.yaml
+pinglabel=curl-test
 testsetupscript=exampletestsetup.sh
 testservicename=hello-web
 testport=80
@@ -56,6 +57,9 @@ tracetime=10
 
     # Collect job trace from pinging container
     gcloud container clusters get-credentials $pingcluster --zone $pingzone --project $pingproject 
+    while [ $(kubectl logs -l name=${pinglabel} --tail 1) != *"DONE"* ]; do
+        sleep 1;
+    done
     kubectl logs -l name=$pinglabel > pinglogs.txt
 
     # Destroy container and pinging container

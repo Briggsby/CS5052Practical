@@ -8,3 +8,4 @@ while [ $SECONDS -lt $end ]; do
 done
 
 cat pinglogs.txt
+echo "DONE"
