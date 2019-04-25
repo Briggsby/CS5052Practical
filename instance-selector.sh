@@ -1,4 +1,5 @@
 # Set variables
+testport=8080
 
 # For each set of test clusters / while optimal test cluster not found
 
@@ -14,7 +15,9 @@
 
     # Deploy container
     kubectl apply -f $testcontainer
-    # NEED TO GET IP ADDRESS OF CONTAINER??
+    # Get ip address of container service being tested
+    testip=$(kubectl describe svc $testservicename | grep "LoadBalancer Ingress" | awk '{print substr($0, 27)}')
+    # Port can be input manually, as it's hard to extract. Defaults to 8080
 
     # Deploy job trace on pinging container
     # NEED TO GIVE IT IP ADDRESS OF TEST CONTAINER?
