@@ -16,6 +16,8 @@ testport=8080
     # Deploy container
     kubectl apply -f $testcontainer
     # Get ip address of container service being tested
+    # Have to wait for ip address to be available:
+
     testip=$(kubectl describe svc $testservicename | grep "LoadBalancer Ingress" | awk '{print substr($0, 27)}')
     # Port can be input manually, as it's hard to extract. Defaults to 8080
 

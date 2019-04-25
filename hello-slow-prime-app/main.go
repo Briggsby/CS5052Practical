@@ -58,11 +58,10 @@ func slowHighestPrime(value int) int {
 			if i%j == 0 {
 				primeval = false
 			}
-			if primeval {
-				x = i
-			}
 		}
-
+		if primeval {
+			x = i
+		}
 	}
 
 	return x
