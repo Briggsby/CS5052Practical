@@ -18,6 +18,9 @@ testcluster=testcluster
 gcloud container clusters get-credentials $testcluster --zone $testzone --project $testproject 
 # Get baseline logs (CPU and Memory load)
 kubectl top nodes > baseline.txt
+
+echo "Collecting baseline top logs"
+
 end=$((SECONDS+$baselinelogtime))
 while [ $SECONDS -lt $end ]; do
     kubectl top nodes >> baseline.txt
@@ -29,6 +32,8 @@ bash $testsetupscript
 
 # Get ip address of container service being tested
 # Have to wait for ip address to be available:
+echo "Waiting for external IP"
+
 while true; do
     if [ $(kubectl describe svc $testservicename | grep "LoadBalancer Ingress" | wc -l) -ne 0 ]; then
         testip=$(kubectl describe svc $testservicename | grep "LoadBalancer Ingress" | awk '{print substr($0, 27)}')
@@ -46,6 +51,8 @@ kubectl apply -f $pingcontainer
 
 gcloud container clusters get-credentials $testcluster --zone $testzone --project $testproject
 # While job trace ongoing get logs of CPU and memory load
+echo "Collecting top logs while ping trace finishes"
+
 end=$((SECONDS+$tracetime))
 while [ $SECONDS -lt $end ]; do
     kubectl top nodes >> tracetop.txt
@@ -53,6 +60,7 @@ done
 
 # Collect job trace from pinging container
 gcloud container clusters get-credentials $pingcluster --zone $pingzone --project $pingproject 
+echo "Waiting for DONE in ping logs"
 while [ $(kubectl logs -l name=${pinglabel} --tail 1) != *"DONE"* ]; do
     sleep 1;
 done
