@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Set variables
 toplogtime=10
 testcontainer=exampleserver.yaml
