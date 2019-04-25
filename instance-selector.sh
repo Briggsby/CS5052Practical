@@ -1,5 +1,15 @@
 # Set variables
+baselinelogtime=10
+testcontainer=exampleserver.yaml
+testsetupscript=exampletestsetup.sh
+testservicename=hello-web
 testport=8080
+pingcluster=pingcluster
+pingzone=europe-west1-b
+testzone=europe-west1-b
+pingproject=scenic-rampart-237010
+testproject=$pingproject
+tracetime=10
 
 # For each set of test clusters / while optimal test cluster not found
 
@@ -15,10 +25,16 @@ testport=8080
 
     # Deploy container
     kubectl apply -f $testcontainer
+    bash $testsetupscript
+
     # Get ip address of container service being tested
     # Have to wait for ip address to be available:
-
-    testip=$(kubectl describe svc $testservicename | grep "LoadBalancer Ingress" | awk '{print substr($0, 27)}')
+    while true; do
+        if ($(kubectl describe svc $testservicename | grep "LoadBalancer Ingress") -ne 0); then
+            testip=$(kubectl describe svc $testservicename | grep "LoadBalancer Ingress" | awk '{print substr($0, 27)}')
+            break
+        fi
+    done
     # Port can be input manually, as it's hard to extract. Defaults to 8080
 
     # Deploy job trace on pinging container
