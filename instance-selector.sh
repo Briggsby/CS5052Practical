@@ -63,11 +63,25 @@ tracetime=10
     done
 
     # Collect job trace from pinging container
-    gcloud container clusters get-credentials $pingcluster --zone $pingzone --project $pingproject 
+    gcloud container clusters get-credentials $pingcluster --zone $pingzone --project $pingproject
+     
     echo "Waiting for DONE in ping logs"
-    while [[ $(kubectl logs -l name=${pinglabel} --tail 1) != *"DONE"* ]]; do
-        sleep 1;
+
+    while true; do
+        PODS=$(kubectl get pods | grep ${pinglabel} | awk '{print $1}')
+        breaking="Yes"
+        for POD in ${PODS}; do
+            if  [[ $(kubectl logs ${POD} --tail 1) != *"DONE"* ]]
+            then
+            breaking="No"
+            fi
+        done
+        if [[ $breaking == "Yes" ]]
+        then
+            break
+        fi
     done
+
     kubectl logs -l name=$pinglabel > pinglogs.txt
 
     # Destroy container and pinging container
