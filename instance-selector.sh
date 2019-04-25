@@ -1,5 +1,5 @@
 # Set variables
-baselinelogtime=10
+toplogtime=10
 testcontainer=exampleserver.yaml
 pingcontainer=exampleping.yaml
 pinglabel=curl-test
@@ -11,7 +11,7 @@ pingzone=europe-west1-b
 testzone=europe-west1-b
 pingproject=scenic-rampart-237010
 testproject=$pingproject
-tracetime=10
+tracetime=20
 
 # For each set of test clusters / while optimal test cluster not found
 
@@ -22,9 +22,9 @@ tracetime=10
     # Get baseline logs (CPU and Memory load)
     echo "Collecting baseline top logs"
 
-    kubectl top nodes > baseline.txt
-    end=$((SECONDS+$baselinelogtime))
+    end=$((SECONDS+$toplogtime))
     while [ $SECONDS -lt $end ]; do
+        echo $(date) >> baseline.txt
         kubectl top nodes >> baseline.txt
     done
 
@@ -53,18 +53,17 @@ tracetime=10
 
     gcloud container clusters get-credentials $testcluster --zone $testzone --project $testproject
     # While job trace ongoing get logs of CPU and memory load
-    kubectl top nodes > tracetop.txt
-
     echo "Collecting top logs while ping trace finishes"
 
-    end=$((SECONDS+$tracetime))
+    end=$((SECONDS+$toplogtime))
     while [ $SECONDS -lt $end ]; do
+        echo $(date) >> tracetop.txt
         kubectl top nodes >> tracetop.txt
     done
 
     # Collect job trace from pinging container
     gcloud container clusters get-credentials $pingcluster --zone $pingzone --project $pingproject
-     
+
     echo "Waiting for DONE in ping logs"
 
     while true; do
