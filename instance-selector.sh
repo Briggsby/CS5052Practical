@@ -64,7 +64,7 @@ tracetime=10
     # Collect job trace from pinging container
     gcloud container clusters get-credentials $pingcluster --zone $pingzone --project $pingproject 
     echo "Waiting for DONE in ping logs"
-    while [ $(kubectl logs -l name=${pinglabel} --tail 1) != *"DONE"* ]; do
+    while [[ $(kubectl logs -l name=${pinglabel} --tail 1) != *"DONE"* ]]; do
         sleep 1;
     done
     kubectl logs -l name=$pinglabel > pinglogs.txt
