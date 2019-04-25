@@ -1,9 +1,10 @@
 # Set variables
 baselinelogtime=10
 testcontainer=exampleserver.yaml
+pingcontainer=pingcontainer.yaml
 testsetupscript=exampletestsetup.sh
 testservicename=hello-web
-testport=8080
+testport=80
 pingcluster=pingcluster
 pingzone=europe-west1-b
 testzone=europe-west1-b
@@ -35,7 +36,7 @@ tracetime=10
             break
         fi
     done
-    # Port can be input manually, as it's hard to extract. Defaults to 8080
+    # Port can be input manually, as it's hard to extract. Defaults to 80
 
     # Deploy job trace on pinging container
     # NEED TO GIVE IT IP ADDRESS OF TEST CONTAINER?
