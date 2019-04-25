@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: curl-test
+  labels:
+    k8s-app: curl-test
+spec:
+  selector:
+    matchLabels:
+      name: curl-test
+  template:
+    metadata:
+      labels:
+        name: curl-test
+    spec:
+      containers:
+      - name: curl-test
+        image: gcr.io/scenic-rampart-237010/ping-app:v0.1
+        env:
+          - name: PINGTIME
+            valueFrom:
+              configMapKeyRef:
+                name: ping-config
+                key: PINGTIME
+          - name: IPTARGET
+            valueFrom:
+              configMapKeyRef:
+                name: ping-config
+                key: IPTARGET
+          - name: PORTTARGET
+            valueFrom:
+              configMapKeyRef:
+                name: ping-config
+                key: PORTTARGET
+        command: ["/bin/sh", "-c"]
+        args: ["bash root/pingscript.sh $(PINGTIME) $(IPTARGET) $(PORTTARGET)"]

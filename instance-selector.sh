@@ -16,6 +16,7 @@ tracetime=10
 
     # Make test cluster
         # Variables: Zone, Number of nodes, Machine type
+    testcluster=testcluster
 
     # Get baseline logs (CPU and Memory load)
     kubectl top nodes > baseline.txt
@@ -39,8 +40,10 @@ tracetime=10
     # Port can be input manually, as it's hard to extract. Defaults to 80
 
     # Deploy job trace on pinging container
-    # NEED TO GIVE IT IP ADDRESS OF TEST CONTAINER?
     gcloud container clusters get-credentials $pingcluster --zone $pingzone --project $pingproject 
+    
+    # Make config map for pinging
+    kubectl create configmap ping-config --from-literal=PINGTIME=${tracetime} --from-literal=IPTARGET=${testip} --from-literal=PORTTARGET=${testport}
     kubectl apply -f $pingcontainer
 
     gcloud container clusters get-credentials $testcluster --zone $testzone --project $testproject
