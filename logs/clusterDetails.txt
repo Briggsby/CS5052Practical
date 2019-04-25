@@ -1,0 +1,9 @@
+  diskSizeGb: 30
+  diskType: pd-standard
+  machineType: g1-small
+nodePools:
+    diskSizeGb: 30
+    diskType: pd-standard
+    machineType: g1-small
+  initialNodeCount: 4
+zone: europe-west1-b

@@ -16,16 +16,12 @@ testproject=$pingproject
 tracetime=20
 testcluster=testcluster
 
+mkdir logs
 
 gcloud container clusters get-credentials $testcluster --zone $testzone --project $testproject 
-# Get baseline logs (CPU and Memory load)
-echo "Collecting baseline top logs"
 
-end=$((SECONDS+$toplogtime))
-while [ $SECONDS -lt $end ]; do
-    echo $(date) >> baseline.txt
-    kubectl top nodes >> baseline.txt
-done
+# Get cluster details
+gcloud container clusters describe $testcluster | grep "zone: \|initialNodeCount:\|machineType:\|diskSize\|diskType\|nodePools:" > logs/clusterDetails.txt
 
 # Deploy container
 kubectl apply -f $testcontainer
@@ -51,18 +47,8 @@ kubectl delete configmap ping-config
 kubectl create configmap ping-config --from-literal=PINGTIME=${tracetime} --from-literal=IPTARGET=${testip} --from-literal=PORTTARGET=${testport}
 kubectl apply -f $pingcontainer
 
-gcloud container clusters get-credentials $testcluster --zone $testzone --project $testproject
-# While job trace ongoing get logs of CPU and memory load
-echo "Collecting top logs while ping trace finishes"
-
-end=$((SECONDS+$toplogtime))
-while [ $SECONDS -lt $end ]; do
-    echo $(date) >> tracetop.txt
-    kubectl top nodes >> tracetop.txt
-done
-
 # Collect job trace from pinging container
-gcloud container clusters get-credentials $pingcluster --zone $pingzone --project $pingproject 
+# gcloud container clusters get-credentials $pingcluster --zone $pingzone --project $pingproject 
 echo "Waiting for DONE in all ping logs"
 
 while true; do
@@ -80,10 +66,7 @@ while true; do
     fi
   done
 
-# while [[ $(kubectl logs -l name=${pinglabel} --tail 1) != *"DONE"* ]]; do
-#     sleep 1;
-# done
-kubectl logs -l name=$pinglabel > pinglogs.txt
+kubectl logs -l name=$pinglabel > logs/pinglogs.txt
 
 # Destroy container and pinging container
 kubectl delete -f $pingcontainer
@@ -91,7 +74,9 @@ gcloud container clusters get-credentials $testcluster --zone $testzone --projec
 kubectl delete -f $testcontainer
 kubectl delete svc $testservicename
 
-# Analyse logs to choose next test cluster, or stop if stopping condition met
-# python3 logAnalysis.py
+# Add to csv
+python3 logsToCSV.py
+rm logs/clusterDetails.txt
+rm logs/pinglogs.txt
 
 # Print analysis and suggested cluster configuration
