@@ -32,7 +32,7 @@ tracetime=10
     # Get ip address of container service being tested
     # Have to wait for ip address to be available:
     while true; do
-        if [ $(kubectl describe svc $testservicename | grep "LoadBalancer Ingress") -ne 0 ]; then
+        if [ $(kubectl describe svc $testservicename | grep "LoadBalancer Ingress" | wc -l) -ne 0 ]; then
             testip=$(kubectl describe svc $testservicename | grep "LoadBalancer Ingress" | awk '{print substr($0, 27)}')
             break
         fi
