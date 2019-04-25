@@ -18,7 +18,7 @@ gcloud container clusters get-credentials $testcluster --zone $testzone --projec
 # Get baseline logs (CPU and Memory load)
 kubectl top nodes > baseline.txt
 end=$((SECONDS+$baselinelogtime))
-while [$SECONDS -lt $end]; do
+while [ $SECONDS -lt $end ]; do
     kubectl top nodes >> baseline.txt
 done
 
@@ -29,7 +29,7 @@ bash $testsetupscript
 # Get ip address of container service being tested
 # Have to wait for ip address to be available:
 while true; do
-    if ($(kubectl describe svc $testservicename | grep "LoadBalancer Ingress") -ne 0); then
+    if [ $(kubectl describe svc $testservicename | grep "LoadBalancer Ingress" | wc -l) -ne 0 ]; then
         testip=$(kubectl describe svc $testservicename | grep "LoadBalancer Ingress" | awk '{print substr($0, 27)}')
         break
     fi
@@ -46,7 +46,7 @@ kubectl apply -f $pingcontainer
 gcloud container clusters get-credentials $testcluster --zone $testzone --project $testproject
 # While job trace ongoing get logs of CPU and memory load
 end=$((SECONDS+$tracetime))
-while [$SECONDS -lt $end]; do
+while [ $SECONDS -lt $end ]; do
     kubectl top nodes >> tracetop.txt
 done
 

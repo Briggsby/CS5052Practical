@@ -21,7 +21,7 @@ tracetime=10
     # Get baseline logs (CPU and Memory load)
     kubectl top nodes > baseline.txt
     end=$((SECONDS+$baselinelogtime))
-    while [$SECONDS -lt $end]; do
+    while [ $SECONDS -lt $end ]; do
         kubectl top nodes >> baseline.txt
     done
 
@@ -50,7 +50,7 @@ tracetime=10
     # While job trace ongoing get logs of CPU and memory load
     kubectl top nodes > tracetop.txt
     end=$((SECONDS+$tracetime))
-    while [$SECONDS -lt $end]; do
+    while [ $SECONDS -lt $end ]; do
         kubectl top nodes >> tracetop.txt
     done
 
