@@ -31,13 +31,9 @@ while read p; do
     # Make test cluster
         # Variables: Zone, Number of nodes, Machine type
 
-    if [[ $oldMachineType == $machineType ]]; then
-        gcloud container clusters resize testcluster --node-pool default-pool --size ${numNodes} -q
-    else
-        gcloud container clusters delete testcluster -q
-        gcloud config set compute/zone ${region}
-        gcloud container clusters create testcluster --machine-type ${machineType} --disk-size ${diskSize} --num-nodes ${numNodes} --disk-type ${diskType} --zone ${region}
-    fi
+    gcloud container clusters delete testcluster -q
+    gcloud config set compute/zone ${region}
+    gcloud container clusters create testcluster --machine-type ${machineType} --disk-size ${diskSize} --num-nodes ${numNodes} --disk-type ${diskType} --zone ${region}
     gcloud container clusters get-credentials testcluster
 
     bash collectclusteranalysis.sh
