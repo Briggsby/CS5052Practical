@@ -48,6 +48,7 @@ gcloud container clusters get-credentials $pingcluster --zone $pingzone --projec
 kubectl delete configmap ping-config
 kubectl create configmap ping-config --from-literal=PINGTIME=${tracetime} --from-literal=IPTARGET=${testip} --from-literal=PORTTARGET=${testport}
 kubectl apply -f $pingcontainer
+# bash $pingsetupscript
 
 # Collect job trace from pinging container
 # gcloud container clusters get-credentials $pingcluster --zone $pingzone --project $pingproject 
