@@ -31,7 +31,7 @@ while read p; do
     # Make test cluster
         # Variables: Zone, Number of nodes, Machine type
 
-    gcloud container clusters delete testcluster -q
+    gcloud container clusters delete testcluster --zone ${testzone} -q
     gcloud config set compute/zone ${region}
     gcloud container clusters create testcluster --machine-type ${machineType} --disk-size ${diskSize} --num-nodes ${numNodes} --disk-type ${diskType} --zone ${region}
     gcloud container clusters get-credentials testcluster --zone ${testzone}
