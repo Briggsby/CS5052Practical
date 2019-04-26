@@ -1,4 +1,3 @@
-DiskSize,DiskType,MachineType,NodeCount,Zone,PriceHourly,TraceTime
 30,Pd-standard,f1-micro,2,europe-west1-b,0.0086,60
 30,Pd-standard,f1-micro,5,europe-west1-b,0.0086,60
 30,Pd-standard,f1-micro,10,europe-west1-b,0.0086,60

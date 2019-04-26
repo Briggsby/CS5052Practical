@@ -5,6 +5,22 @@ import os
 logs = open('logs/pinglogs.txt', 'r').read().splitlines()
 cluster_details = open('logs/clusterDetails.txt', 'r').read().splitlines()
 
+# Due to time constraints just put this in a dictionary, specific
+# to europe-west1-b shouldn't be hard to get this from the 
+# user input file instead though
+prices = {"f1-micro": 0.0086,
+          "g1-small": 0.0285,
+          "n1-standard-1": 0.0523,
+          "n1-standard-2": 0.1046,
+          "n1-standard-8": 0.4184,
+          "n1-standard-16": 0.8368,
+          "n1-standard-32": 1.6736,
+          "n1-standard-64": 3.3472,
+          "n1-standard-96": 5.0280,
+          "n1-highcpu-2": 0.078,
+          "n1-highcpu-8": 0.312}
+
+
 inputs = []
 response_times = []
 diskSize = []
@@ -12,6 +28,7 @@ diskType = []
 machineType = []
 nodeCount = []
 zone = ""
+prices = []
 
 for line in logs:
     if line != "DONE":
@@ -34,7 +51,8 @@ data = {"Inputs": inputs,
         "DiskType": diskType*len(inputs),
         "MachineType": machineType*len(inputs),
         "NodeCount": nodeCount*len(inputs),
-        "Zone": [zone for _ in range(len(inputs))]}
+        "Zone": [zone for _ in range(len(inputs))],
+        "PriceHourlyPerNode": prices[machneType]*len(inputs)}
 
 df = pd.DataFrame(data)
 
