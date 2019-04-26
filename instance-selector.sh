@@ -34,7 +34,7 @@ while read p; do
     gcloud container clusters delete testcluster -q
     gcloud config set compute/zone ${region}
     gcloud container clusters create testcluster --machine-type ${machineType} --disk-size ${diskSize} --num-nodes ${numNodes} --disk-type ${diskType} --zone ${region}
-    gcloud container clusters get-credentials testcluster
+    gcloud container clusters get-credentials testcluster --zone ${testzone}
 
     bash collectclusteranalysis.sh
 
