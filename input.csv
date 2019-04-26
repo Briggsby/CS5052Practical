@@ -13,6 +13,4 @@
 30,pd-standard,n1-highcpu-2,3,europe-west1-b,0.078,60
 30,pd-standard,n1-highcpu-2,6,europe-west1-b,0.078,60
 30,pd-standard,n1-highcpu-2,10,europe-west1-b,0.078,60
-30,pd-standard,n1-highcpu-8,3,europe-west1-b,0.312,60
-30,pd-standard,n1-highcpu-8,6,europe-west1-b,0.312,60
-30,pd-standard,n1-highcpu-8,10,europe-west1-b,0.312,60
+30,pd-standard,n1-highcpu-8,2,europe-west1-b,0.312,60
