@@ -10,7 +10,7 @@ testservicename=hello-web
 testport=80
 pingcluster=pingcluster
 pingzone=europe-west1-b
-testzone=europe-west1-b
+testzone=europe-west2-a
 pingproject=scenic-rampart-237010
 testproject=$pingproject
 tracetime=20
@@ -26,7 +26,7 @@ while read p; do
     diskType=$(echo "$p" | awk '{split($0, a, ","); print a[2]}')
     machineType=$(echo "$p" | awk '{split($0, a, ","); print a[3]}')
     numNodes=$(echo "$p" | awk '{split($0, a, ","); print a[4]}')
-    zone=$(echo "$p" | awk '{split($0, a, ","); print a[5]}')
+    region=$(echo "$p" | awk '{split($0, a, ","); print a[5]}')
 
     # Make test cluster
         # Variables: Zone, Number of nodes, Machine type
@@ -35,8 +35,8 @@ while read p; do
         gcloud container clusters resize testcluster --node-pool default-pool --size ${numNodes} -q
     else
         gcloud container clusters delete testcluster -q
-        gcloud config set compute/zone ${zone}
-        gcloud container clusters create testcluster --machine-type ${machineType} --disk-size ${diskSize} --num-nodes ${numNodes} --disk-type ${diskType}
+        gcloud config set compute/zone ${region}
+        gcloud container clusters create testcluster --machine-type ${machineType} --disk-size ${diskSize} --num-nodes ${numNodes} --disk-type ${diskType} --zone ${region}
     fi
     gcloud container clusters get-credentials testcluster
 
