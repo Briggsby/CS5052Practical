@@ -32,9 +32,9 @@ while read p; do
         # Variables: Zone, Number of nodes, Machine type
 
     if [[ $oldMachineType == $machineType ]]; then
-        gcloud container clusters resize testcluster --node-pool default-pool --size ${numNodes}
+        gcloud container clusters resize testcluster --node-pool default-pool --size ${numNodes} -q
     else
-        gcloud container clusters delete testcluster -y
+        gcloud container clusters delete testcluster -q
         gcloud config set compute/zone ${zone}
         gcloud container clusters create testcluster --machine-type ${machineType} --disk-size ${diskSize} --num-nodes ${numNodes} --disk-type ${diskType}
     fi
