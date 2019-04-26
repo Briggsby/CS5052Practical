@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Set variables
+# These variables would be set by arguments
 toplogtime=10
 testcontainer=exampleserver.yaml
 pingcontainer=exampleping.yaml
@@ -15,6 +16,7 @@ pingproject=scenic-rampart-237010
 testproject=$pingproject
 tracetime=60
 testcluster=testcluster
+logsToCsv=exampleLogsToCSV.sh
 
 mkdir logs
 
@@ -75,7 +77,7 @@ kubectl delete -f $testcontainer
 kubectl delete svc $testservicename
 
 # Add to csv
-python3 logsToCSV.py
+bash logsToCsv
 rm logs/clusterDetails.txt
 rm logs/pinglogs.txt
 

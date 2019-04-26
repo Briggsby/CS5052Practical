@@ -13,7 +13,7 @@ pingzone=europe-west1-b
 testzone=europe-west2-a
 pingproject=scenic-rampart-237010
 testproject=$pingproject
-tracetime=20
+tracetime=60
 
 mkdir logs
 
@@ -36,9 +36,11 @@ while read p; do
     gcloud container clusters create testcluster --machine-type ${machineType} --disk-size ${diskSize} --num-nodes ${numNodes} --disk-type ${diskType} --zone ${region}
     gcloud container clusters get-credentials testcluster --zone ${testzone}
 
-    bash collectclusteranalysis.sh
+    bash collectclusteranalysis.sh "$@"
 
 done <input.csv
     # Analyse logs to choose next test cluster, or stop if stopping condition met
+
+# Run analysis.py
 
 # Print analysis and suggested cluster configuration
