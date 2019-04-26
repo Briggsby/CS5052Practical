@@ -13,7 +13,7 @@ pingzone=europe-west1-b
 testzone=europe-west1-b
 pingproject=scenic-rampart-237010
 testproject=$pingproject
-tracetime=20
+tracetime=60
 testcluster=testcluster
 
 mkdir logs
