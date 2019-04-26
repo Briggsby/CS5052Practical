@@ -51,7 +51,7 @@ data = {"Inputs": inputs,
         "MachineType": machineType*len(inputs),
         "NodeCount": nodeCount*len(inputs),
         "Zone": [zone for _ in range(len(inputs))],
-        "PriceHourlyPerNode": prices[machineType[0]]*len(inputs)
+        "PriceHourlyPerNode": prices[machineType[0]]
         }
 
 df = pd.DataFrame(data)
