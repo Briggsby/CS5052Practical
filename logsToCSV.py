@@ -28,10 +28,6 @@ for line_index in range(len(cluster_details)):
     elif cluster_details[line_index].split(": ")[0] == "zone":
         zone=cluster_details[line_index].split(": ")[1]
 
-data = np.asarray([inputs, response_times, [diskSize for _ in range(len(inputs))],
- [diskType for _ in range(len(inputs))],  [machineType for _ in range(len(inputs))],
-  [nodeCount for _ in range(len(inputs))],  [zone for _ in range(len(inputs))]])
-
 data = {"Inputs": inputs,
         "ResponseTimes": response_times,
         "DiskSize": diskSize*len(inputs),
