@@ -19,6 +19,9 @@ mkdir logs
 
 # For each set of test clusters / while optimal test cluster not found
 while read p; do
+
+    oldMachineType=$machineType
+
     diskSize=$(echo "$p" | awk '{split($0, a, ","); print a[1]}')
     diskType=$(echo "$p" | awk '{split($0, a, ","); print a[2]}')
     machineType=$(echo "$p" | awk '{split($0, a, ","); print a[3]}')
@@ -27,8 +30,14 @@ while read p; do
 
     # Make test cluster
         # Variables: Zone, Number of nodes, Machine type
-    gcloud config set compute/zone ${zone}
-    gcloud container clusters create testcluster --machine-type ${machineType} --disk-size ${diskSize} --num-nodes ${numNodes} --disk-type ${diskType}
+
+    if [[ $oldMachineType == $machineType ]]; then
+        gcloud container clusters resize testcluster --node-pool default-pool --size ${numNodes}
+    else
+        gcloud container clusters delete testcluster -y
+        gcloud config set compute/zone ${zone}
+        gcloud container clusters create testcluster --machine-type ${machineType} --disk-size ${diskSize} --num-nodes ${numNodes} --disk-type ${diskType}
+    fi
     gcloud container clusters get-credentials testcluster
 
     bash collectclusteranalysis.sh
