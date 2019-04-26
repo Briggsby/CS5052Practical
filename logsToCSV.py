@@ -28,7 +28,6 @@ diskType = []
 machineType = []
 nodeCount = []
 zone = ""
-prices = []
 
 for line in logs:
     if line != "DONE":
@@ -52,7 +51,8 @@ data = {"Inputs": inputs,
         "MachineType": machineType*len(inputs),
         "NodeCount": nodeCount*len(inputs),
         "Zone": [zone for _ in range(len(inputs))],
-        "PriceHourlyPerNode": prices[machneType]*len(inputs)}
+        "PriceHourlyPerNode": prices[machineType]*len(inputs)
+        }
 
 df = pd.DataFrame(data)
 
