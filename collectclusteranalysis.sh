@@ -16,14 +16,14 @@ pingproject=scenic-rampart-237010
 testproject=$pingproject
 tracetime=60
 testcluster=testcluster
-logsToCsv=exampleLogsToCSV.sh
+logsToCSV=exampleLogsToCSV.sh
 
 mkdir logs
 
 gcloud container clusters get-credentials $testcluster --zone $testzone --project $testproject 
 
 # Get cluster details
-gcloud container clusters describe $testcluster | grep "zone: \|initialNodeCount:\|machineType:\|diskSize\|diskType\|nodePools:" > logs/clusterDetails.txt
+gcloud container clusters describe $testcluster --zone $testzone | grep "zone: \|initialNodeCount:\|machineType:\|diskSize\|diskType\|nodePools:" > logs/clusterDetails.txt
 
 # Deploy container
 kubectl apply -f $testcontainer
@@ -78,7 +78,7 @@ kubectl delete -f $testcontainer
 kubectl delete svc $testservicename
 
 # Add to csv
-bash logsToCsv
+bash $logsToCSV
 rm logs/clusterDetails.txt
 rm logs/pinglogs.txt
 
